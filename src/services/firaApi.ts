@@ -30,6 +30,7 @@ export const uploadAndProcessFira = async (
   paymentMethod: string,
   importerId?: number
 ): Promise<FiraProcessingResult> => {
+  console.log("uploadAndProcessFira");
   // Build URL with query parameters
   const baseUrl = 'https://d81f-106-51-85-199.ngrok-free.app/api/v1/fira/upload';
   const params = new URLSearchParams();
