@@ -55,9 +55,6 @@ export const uploadAndProcessFira = async (
   try {
     const response = await fetch(urlWithParams, {
       method: 'POST',
-      headers: {
-        'ngrok-skip-browser-warning': 'true'
-      },
       body: formData,
     });
 
