@@ -4,6 +4,7 @@ import { ComparisonResults } from "@/components/ComparisonResults";
 import { AnimatedHeaderText } from "@/components/AnimatedHeaderText";
 import { LoadingStages } from "@/components/LoadingStages";
 import { motion } from "framer-motion";
+
 const Index = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [analysisData, setAnalysisData] = useState<any>(null);
@@ -70,7 +71,7 @@ const Index = () => {
   };
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Skydo Logo - Centered */}
+        {/* Skydo Logo - Left aligned */}
         <motion.div initial={{
         opacity: 0,
         y: -20
@@ -79,7 +80,7 @@ const Index = () => {
         y: 0
       }} transition={{
         duration: 0.5
-      }} className="flex justify-center top-6 z-10 mb-8">
+      }} className="flex justify-start top-6 z-10 mb-8">
           <button onClick={handleLogoClick} className="hover:opacity-80 transition-opacity duration-200">
             <img src="/lovable-uploads/8a593f9d-5b27-4492-ab02-1b13c5699292.png" alt="Skydo Logo" className="h-9 w-auto" />
           </button>
@@ -112,4 +113,5 @@ const Index = () => {
       </div>
     </div>;
 };
+
 export default Index;
