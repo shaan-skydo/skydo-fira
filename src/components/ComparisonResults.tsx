@@ -63,15 +63,15 @@ export const ComparisonResults = ({
       transition={{ duration: 0.6 }}
       className="max-w-6xl mx-auto space-y-8 relative"
     >
-      {/* Glassmorphic Back Button */}
+      {/* Enhanced Glassmorphic Back Button */}
       <motion.button
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
         onClick={onBackToHome}
-        className="absolute -top-4 left-0 z-10 w-12 h-12 rounded-full backdrop-blur-md bg-white/20 border border-white/30 shadow-lg hover:bg-white/30 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="absolute -top-6 left-0 z-20 w-14 h-14 rounded-full backdrop-blur-xl bg-white/30 border border-white/40 shadow-2xl hover:bg-white/40 hover:scale-105 hover:shadow-3xl transition-all duration-300 flex items-center justify-center group before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r before:from-white/20 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
       >
-        <ArrowLeft className="w-5 h-5 text-slate-700 group-hover:text-slate-900 transition-colors" />
+        <ArrowLeft className="w-6 h-6 text-slate-800 group-hover:text-slate-900 transition-all duration-300 relative z-10 drop-shadow-sm" />
       </motion.button>
 
       {/* Savings Header */}
