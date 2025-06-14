@@ -15,13 +15,13 @@ const Index = () => {
 
     // Simulate file processing with realistic timing
     setTimeout(() => {
-      // Mock analysis data - in real implementation, this would parse the FIRA file
+      // Mock analysis data with realistic demo values
       const mockData = {
         currentProvider: {
           name: "Current Bank",
-          paymentAmount: 5000,
+          paymentAmount: 415000, // $5000 * 83 INR (base calculation)
           charges: [{
-            type: "FX Margin",
+            type: "FX Rate",
             amount: 85.19,
             isPercentage: false
           }, {
@@ -31,31 +31,31 @@ const Index = () => {
             type: "FIRA Fee",
             amount: 5.00
           }],
-          totalOnTransaction: 1275.00,
-          effectiveCost: 2.85
+          totalOnTransaction: 8596, // Calculated to get ₹4,21,904 received
+          effectiveCost: 1.85
         },
         skydo: {
           name: "Skydo",
-          paymentAmount: 50000,
+          paymentAmount: 415000, // $5000 * 83 INR (base calculation)
           charges: [{
-            type: "FX Margin",
-            amount: 0,
+            type: "FX Rate",
+            amount: 86.09,
             isPercentage: false
           }, {
             type: "Wire Fee",
-            amount: 3.00
+            amount: 0.00
           }, {
             type: "FIRA Fee",
             amount: 0.00
           }],
-          totalOnTransaction: 253.00,
-          effectiveCost: 0.51
+          totalOnTransaction: 2978, // Calculated to get ₹4,27,522 received
+          effectiveCost: 0.58
         },
         savings: {
-          amount: 1022.00,
-          percentage: 80.1
+          amount: 5618, // Difference between what you'll receive
+          percentage: 65.4
         },
-        transactionAmount: 50000
+        transactionAmount: 415000 // Base INR amount
       };
       setAnalysisData(mockData);
       setIsAnalyzing(false);

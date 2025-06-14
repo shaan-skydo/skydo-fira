@@ -45,31 +45,39 @@ export const ComparisonResults = ({
   onBackToHome
 }: ComparisonResultsProps) => {
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
-  // Convert initial amount to USD for the slider
-  const initialUSDAmount = data.transactionAmount / 83;
+  // Convert initial amount to USD for the slider (using 5000 as base)
+  const initialUSDAmount = 5000;
   const [editAmount, setEditAmount] = useState([initialUSDAmount]);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   // Calculate updated data based on new USD amount
   const calculateUpdatedData = (newUSDAmount: number) => {
-    const newINRAmount = newUSDAmount * 83;
-    const ratio = newINRAmount / data.transactionAmount;
+    const ratio = newUSDAmount / 5000; // Base ratio from $5000
+    
+    // Calculate INR amounts using the respective FX rates
+    const currentProviderINR = newUSDAmount * 85.19;
+    const skydoINR = newUSDAmount * 86.09;
+    
+    // Calculate fees proportionally
+    const currentProviderFees = (data.currentProvider.totalOnTransaction * ratio);
+    const skydoFees = (data.skydo.totalOnTransaction * ratio);
+    
     return {
       currentProvider: {
         ...data.currentProvider,
-        paymentAmount: newINRAmount,
-        totalOnTransaction: data.currentProvider.totalOnTransaction * ratio
+        paymentAmount: currentProviderINR,
+        totalOnTransaction: currentProviderFees
       },
       skydo: {
         ...data.skydo,
-        paymentAmount: newINRAmount,
-        totalOnTransaction: data.skydo.totalOnTransaction * ratio
+        paymentAmount: skydoINR,
+        totalOnTransaction: skydoFees
       },
       savings: {
-        amount: (data.currentProvider.totalOnTransaction - data.skydo.totalOnTransaction) * ratio,
+        amount: (currentProviderINR - currentProviderFees) - (skydoINR - skydoFees),
         percentage: data.savings.percentage
       },
-      transactionAmount: newINRAmount
+      transactionAmount: currentProviderINR
     };
   };
   const updatedData = calculateUpdatedData(editAmount[0]);
@@ -83,14 +91,12 @@ export const ComparisonResults = ({
     }).format(amount);
   };
   const formatUSD = (amount: number) => {
-    // Convert INR to USD using approximate rate (1 USD = 83 INR)
-    const usdAmount = amount / 83;
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
-    }).format(usdAmount);
+    }).format(amount);
   };
   const formatPercentage = (value: number) => {
     return `${value}%`;
@@ -98,9 +104,9 @@ export const ComparisonResults = ({
 
   const formatChargeAmount = (charge: any) => {
     if (charge.type === "FX Rate") {
-      return charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount);
+      return `₹${charge.amount}`;
     } else if (charge.type === "Wire Fee" || charge.type === "FIRA Fee") {
-      return formatUSD(charge.amount);
+      return charge.amount === 0 ? "FREE" : formatUSD(charge.amount);
     }
     return charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount);
   };
@@ -142,7 +148,7 @@ export const ComparisonResults = ({
               <h2 className="text-3xl font-bold text-black">
                 You could save <span style={{
                 color: '#13734e'
-              }}>{formatCurrency(updatedData.savings.amount)}</span> with Skydo
+              }}>{formatCurrency(Math.abs(updatedData.savings.amount))}</span> with Skydo
               </h2>
             </div>
             <p className="text-green-700 text-lg">
@@ -174,7 +180,7 @@ export const ComparisonResults = ({
                 <span className="text-slate-600">Foreign Currency Amount</span>
                 <div className="flex items-center space-x-2">
                   <span className="font-semibold text-slate-800">
-                    {formatUSD(updatedData.currentProvider.paymentAmount)}
+                    {formatUSD(editAmount[0])}
                   </span>
                   <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                     <DialogTrigger asChild>
@@ -199,10 +205,10 @@ export const ComparisonResults = ({
                               }).format(editAmount[0])}
                             </span>
                           </div>
-                          <Slider value={editAmount} onValueChange={setEditAmount} max={6000} min={6} step={6} className="w-full" />
+                          <Slider value={editAmount} onValueChange={setEditAmount} max={1000000} min={500} step={500} className="w-full" />
                           <div className="flex justify-between text-xs text-slate-500">
-                            <span>$6</span>
-                            <span>$6,000</span>
+                            <span>$500</span>
+                            <span>$1M</span>
                           </div>
                         </div>
                         <div className="text-center">
@@ -217,9 +223,9 @@ export const ComparisonResults = ({
               </div>
 
               {data.currentProvider.charges.map((charge, index) => <div key={index} className="flex justify-between items-center py-2 border-b border-slate-100">
-                  <span className="text-slate-600">{charge.type === "FX Margin" ? "FX Rate" : charge.type}</span>
+                  <span className="text-slate-600">{charge.type}</span>
                   <span className="font-semibold text-slate-800">
-                    {formatChargeAmount({...charge, type: charge.type === "FX Margin" ? "FX Rate" : charge.type})}
+                    {formatChargeAmount(charge)}
                   </span>
                 </div>)}
               
@@ -227,7 +233,7 @@ export const ComparisonResults = ({
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-slate-700">You'll receive</span>
                   <span className="font-bold text-lg text-slate-800">
-                    {formatCurrency(updatedData.transactionAmount - updatedData.currentProvider.totalOnTransaction)}
+                    {formatCurrency(updatedData.currentProvider.paymentAmount - updatedData.currentProvider.totalOnTransaction)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -263,21 +269,21 @@ export const ComparisonResults = ({
               <div className="flex justify-between items-center py-2 border-b border-green-100">
                 <span className="text-slate-600">Foreign Currency Amount</span>
                 <span className="font-semibold text-green-700">
-                  {formatUSD(updatedData.skydo.paymentAmount)}
+                  {formatUSD(editAmount[0])}
                 </span>
               </div>
 
               {data.skydo.charges.map((charge, index) => <div key={index} className="flex justify-between items-center py-2 border-b border-green-100">
                   <div className="flex items-center space-x-2">
-                    <span className="text-slate-600">{charge.type === "FX Margin" ? "FX Rate" : charge.type}</span>
-                    {charge.type === "FX Margin" && (
+                    <span className="text-slate-600">{charge.type}</span>
+                    {charge.type === "FX Rate" && (
                       <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full border border-green-200">
                         0 Margin
                       </span>
                     )}
                   </div>
                   <span className="font-semibold text-green-700">
-                    {charge.type === "FX Margin" ? "₹0" : charge.amount === 0 ? "FREE" : formatChargeAmount({...charge, type: charge.type === "FX Margin" ? "FX Rate" : charge.type})}
+                    {formatChargeAmount(charge)}
                   </span>
                 </div>)}
               
@@ -285,7 +291,7 @@ export const ComparisonResults = ({
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-slate-700">You'll receive</span>
                   <span className="font-bold text-lg text-green-800">
-                    {formatCurrency(updatedData.transactionAmount - updatedData.skydo.totalOnTransaction)}
+                    {formatCurrency(updatedData.skydo.paymentAmount - updatedData.skydo.totalOnTransaction)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
