@@ -45,31 +45,35 @@ export const ComparisonResults = ({
   onBackToHome
 }: ComparisonResultsProps) => {
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
-  const [editAmount, setEditAmount] = useState([data.transactionAmount]);
+  // Convert initial amount to USD for the slider
+  const initialUSDAmount = data.transactionAmount / 83;
+  const [editAmount, setEditAmount] = useState([initialUSDAmount]);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  // Calculate updated data based on new amount
-  const calculateUpdatedData = (newAmount: number) => {
-    const ratio = newAmount / data.transactionAmount;
+  // Calculate updated data based on new USD amount
+  const calculateUpdatedData = (newUSDAmount: number) => {
+    const newINRAmount = newUSDAmount * 83;
+    const ratio = newINRAmount / data.transactionAmount;
     return {
       currentProvider: {
         ...data.currentProvider,
-        paymentAmount: newAmount,
+        paymentAmount: newINRAmount,
         totalOnTransaction: data.currentProvider.totalOnTransaction * ratio
       },
       skydo: {
         ...data.skydo,
-        paymentAmount: newAmount,
+        paymentAmount: newINRAmount,
         totalOnTransaction: data.skydo.totalOnTransaction * ratio
       },
       savings: {
         amount: (data.currentProvider.totalOnTransaction - data.skydo.totalOnTransaction) * ratio,
         percentage: data.savings.percentage
       },
-      transactionAmount: newAmount
+      transactionAmount: newINRAmount
     };
   };
   const updatedData = calculateUpdatedData(editAmount[0]);
+  
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -187,13 +191,18 @@ export const ComparisonResults = ({
                           <div className="flex justify-between items-center">
                             <span className="text-sm font-medium">Amount</span>
                             <span className="text-lg font-bold text-[#283c8b]">
-                              {formatCurrency(editAmount[0])}
+                              {new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'USD',
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                              }).format(editAmount[0])}
                             </span>
                           </div>
-                          <Slider value={editAmount} onValueChange={setEditAmount} max={500000} min={500} step={500} className="w-full" />
+                          <Slider value={editAmount} onValueChange={setEditAmount} max={6000} min={6} step={6} className="w-full" />
                           <div className="flex justify-between text-xs text-slate-500">
-                            <span>₹500</span>
-                            <span>₹5,00,000</span>
+                            <span>$6</span>
+                            <span>$6,000</span>
                           </div>
                         </div>
                         <div className="text-center">
