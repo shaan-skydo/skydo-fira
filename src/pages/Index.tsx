@@ -22,7 +22,7 @@ const Index = () => {
           paymentAmount: 415000, // $5000 * 83 INR (base calculation)
           charges: [{
             type: "FX Rate",
-            amount: 85.19,
+            amount: 85.1937,
             isPercentage: false
           }, {
             type: "Wire Fee",
@@ -39,7 +39,7 @@ const Index = () => {
           paymentAmount: 415000, // $5000 * 83 INR (base calculation)
           charges: [{
             type: "FX Rate",
-            amount: 86.09,
+            amount: 86.0937,
             isPercentage: false
           }, {
             type: "Wire Fee",
