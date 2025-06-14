@@ -1,4 +1,5 @@
 
+
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +9,7 @@ interface ComparisonResultsProps {
   data: {
     currentProvider: {
       name: string;
+      paymentAmount: number;
       charges: Array<{
         type: string;
         amount: number;
@@ -18,6 +20,7 @@ interface ComparisonResultsProps {
     };
     skydo: {
       name: string;
+      paymentAmount: number;
       charges: Array<{
         type: string;
         amount: number;
@@ -92,6 +95,14 @@ export const ComparisonResults = ({
               <CardTitle className="text-2xl text-slate-700 text-center">Current Provider</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Payment Amount */}
+              <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                <span className="text-slate-600">Payment Amount</span>
+                <span className="font-semibold text-slate-800">
+                  {formatCurrency(data.currentProvider.paymentAmount)}
+                </span>
+              </div>
+
               {data.currentProvider.charges.map((charge, index) => (
                 <div key={index} className="flex justify-between items-center py-2 border-b border-slate-100">
                   <span className="text-slate-600">{charge.type}</span>
@@ -129,7 +140,7 @@ export const ComparisonResults = ({
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-green-700 text-center flex items-center justify-center space-x-2">
                 <img 
-                  src="/lovable-uploads/e114eb01-a598-4afe-a954-12034557a0ea.png" 
+                  src="/lovable-uploads/1f37d39c-1900-400a-84cc-fbbc822ff48f.png" 
                   alt="Skydo Logo" 
                   className="w-6 h-6"
                 />
@@ -137,6 +148,14 @@ export const ComparisonResults = ({
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Payment Amount */}
+              <div className="flex justify-between items-center py-2 border-b border-green-100">
+                <span className="text-slate-600">Payment Amount</span>
+                <span className="font-semibold text-green-700">
+                  {formatCurrency(data.skydo.paymentAmount)}
+                </span>
+              </div>
+
               {data.skydo.charges.map((charge, index) => (
                 <div key={index} className="flex justify-between items-center py-2 border-b border-green-100">
                   <span className="text-slate-600">{charge.type}</span>
@@ -185,3 +204,4 @@ export const ComparisonResults = ({
     </motion.div>
   );
 };
+

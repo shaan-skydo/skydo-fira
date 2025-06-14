@@ -18,37 +18,33 @@ const Index = () => {
       const mockData = {
         currentProvider: {
           name: "Current Bank",
+          paymentAmount: 50000,
           charges: [{
-            type: "Wire Fee",
-            amount: 25.00
-          }, {
             type: "FX Margin",
             amount: 2.5,
             isPercentage: true
           }, {
+            type: "Wire Fee",
+            amount: 25.00
+          }, {
             type: "FIRA Fee",
             amount: 15.00
-          }, {
-            type: "Lifting Charges",
-            amount: 500.00
           }],
           totalOnTransaction: 1275.00,
           effectiveCost: 2.85
         },
         skydo: {
           name: "Skydo",
+          paymentAmount: 50000,
           charges: [{
-            type: "Wire Fee",
-            amount: 3.00
-          }, {
             type: "FX Margin",
             amount: 0.5,
             isPercentage: true
           }, {
-            type: "FIRA Fee",
-            amount: 0.00
+            type: "Wire Fee",
+            amount: 3.00
           }, {
-            type: "Lifting Charges",
+            type: "FIRA Fee",
             amount: 0.00
           }],
           totalOnTransaction: 253.00,
