@@ -19,7 +19,7 @@ const Index = () => {
       const mockData = {
         currentProvider: {
           name: "Current Bank",
-          paymentAmount: 50000,
+          paymentAmount: 5000,
           charges: [{
             type: "FX Margin",
             amount: 83.4,
