@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -229,17 +228,15 @@ export const ComparisonResults = ({
               <CardContent className="pt-0 pb-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-blue-100">
-                    <div className="flex items-center space-x-3">
-                      <span className="text-blue-700 font-medium">Transparent pricing</span>
-                      <a 
-                        href="https://www.skydo.com/" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full hover:bg-blue-200 transition-colors"
-                      >
-                        <Info className="w-3 h-3 text-blue-600" />
-                      </a>
-                    </div>
+                    <span className="text-blue-700 font-medium">Transparent pricing</span>
+                    <a 
+                      href="https://www.skydo.com/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full hover:bg-blue-200 transition-colors"
+                    >
+                      <Info className="w-3 h-3 text-blue-600" />
+                    </a>
                   </div>
                   
                   <div className="p-3 bg-white rounded-lg border border-blue-100">
@@ -255,12 +252,10 @@ export const ComparisonResults = ({
                   </div>
                   
                   <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-blue-100">
-                    <div className="flex items-center space-x-3">
-                      <span className="text-blue-700 font-medium">Support for payment via Links</span>
-                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full border border-green-200">
-                        NEW
-                      </span>
-                    </div>
+                    <span className="text-blue-700 font-medium">Support for payment via Links</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full border border-green-200">
+                      NEW
+                    </span>
                   </div>
                 </div>
               </CardContent>
