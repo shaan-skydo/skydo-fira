@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,12 +62,29 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Skydo brand colors
+				'skydo-blue': {
+					DEFAULT: 'hsl(var(--skydo-blue))',
+					light: 'hsl(var(--skydo-blue-light))',
+					dark: 'hsl(var(--skydo-blue-dark))'
+				},
+				'skydo-green': {
+					DEFAULT: 'hsl(var(--skydo-green))',
+					light: 'hsl(var(--skydo-green-light))'
+				},
+				'skydo-gray': {
+					DEFAULT: 'hsl(var(--skydo-gray))',
+					light: 'hsl(var(--skydo-gray-light))'
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			fontFamily: {
+				sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'sans-serif']
 			},
 			keyframes: {
 				'accordion-down': {
