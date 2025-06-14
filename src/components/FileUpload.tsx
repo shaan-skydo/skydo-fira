@@ -1,10 +1,10 @@
-
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, FileText, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
@@ -13,6 +13,7 @@ interface FileUploadProps {
 export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -32,12 +33,12 @@ export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   });
 
   const handleAnalyze = () => {
-    if (uploadedFile && acceptedTerms) {
+    if (uploadedFile && acceptedTerms && paymentMethod) {
       onFileUpload(uploadedFile);
     }
   };
 
-  const canAnalyze = uploadedFile && acceptedTerms;
+  const canAnalyze = uploadedFile && acceptedTerms && paymentMethod;
 
   return (
     <motion.div 
@@ -111,6 +112,25 @@ export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
           transition={{ delay: 0.2 }}
           className="mt-6 space-y-6"
         >
+          {/* Payment Method Dropdown */}
+          <div className="space-y-2">
+            <label htmlFor="payment-method" className="block text-sm font-medium text-slate-700">
+              Payment Method
+            </label>
+            <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select payment method" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-slate-200 shadow-lg z-50">
+                <SelectItem value="bank">Bank</SelectItem>
+                <SelectItem value="paypal">Paypal</SelectItem>
+                <SelectItem value="payoneer">Payoneer</SelectItem>
+                <SelectItem value="wise">Wise</SelectItem>
+                <SelectItem value="others">Others</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Terms & Conditions Checkbox */}
           <div className="flex items-start space-x-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
             <Checkbox
@@ -153,9 +173,14 @@ export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
             >
               Analyze Document
             </Button>
-            {uploadedFile && !acceptedTerms && (
+            {uploadedFile && (!acceptedTerms || !paymentMethod) && (
               <p className="text-sm text-slate-500 mt-2">
-                Please accept the terms & conditions to continue
+                {!paymentMethod && !acceptedTerms 
+                  ? "Please select a payment method and accept the terms & conditions to continue"
+                  : !paymentMethod 
+                    ? "Please select a payment method to continue"
+                    : "Please accept the terms & conditions to continue"
+                }
               </p>
             )}
           </div>
