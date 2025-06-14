@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,8 +85,8 @@ export const ComparisonResults = ({
           <CardContent className="pt-8 pb-6">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <TrendingDown className="w-8 h-8 text-green-600" />
-              <h2 className="text-3xl font-bold text-green-800">
-                You could save {formatCurrency(data.savings.amount)} with Skydo
+              <h2 className="text-3xl font-bold text-black">
+                You could save <span style={{ color: '#07472D' }}>{formatCurrency(data.savings.amount)}</span> with Skydo
               </h2>
             </div>
             <p className="text-green-700 text-lg">
