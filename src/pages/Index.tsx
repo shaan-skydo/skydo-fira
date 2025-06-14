@@ -4,12 +4,10 @@ import { ComparisonResults } from "@/components/ComparisonResults";
 import { AnimatedHeaderText } from "@/components/AnimatedHeaderText";
 import { LoadingStages } from "@/components/LoadingStages";
 import { motion } from "framer-motion";
-
 const Index = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [analysisData, setAnalysisData] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-
   const handleFileUpload = async (file: File) => {
     setUploadedFile(file);
     setIsAnalyzing(true);
@@ -66,45 +64,40 @@ const Index = () => {
       setIsAnalyzing(false);
     }, 8000); // Extended timing for loading stages
   };
-
   const handleBackToHome = () => {
     setUploadedFile(null);
     setAnalysisData(null);
     setIsAnalyzing(false);
   };
-
   const handleLogoClick = () => {
     handleBackToHome();
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
         {/* Skydo Logo */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="absolute top-6 left-6 z-10"
-        >
-          <button
-            onClick={handleLogoClick}
-            className="hover:opacity-80 transition-opacity duration-200"
-          >
-            <img
-              src="/lovable-uploads/8a593f9d-5b27-4492-ab02-1b13c5699292.png"
-              alt="Skydo Logo"
-              className="h-16 w-auto"
-            />
+        <motion.div initial={{
+        opacity: 0,
+        y: -20
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} transition={{
+        duration: 0.5
+      }} className="absolute top-6 left-6 z-10">
+          <button onClick={handleLogoClick} className="hover:opacity-80 transition-opacity duration-200">
+            <img src="/lovable-uploads/8a593f9d-5b27-4492-ab02-1b13c5699292.png" alt="Skydo Logo" className="h-8 w-auto " />
           </button>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 mt-20"
-        >
+        <motion.div initial={{
+        opacity: 0,
+        y: 20
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} transition={{
+        duration: 0.6
+      }} className="text-center mb-12 mt-20">
           <h1 className="text-5xl font-bold text-slate-800 mb-6">
             Find Hidden Costs in Your{" "}
             <AnimatedHeaderText />
@@ -115,18 +108,12 @@ const Index = () => {
           </p>
         </motion.div>
 
-        {!analysisData && !isAnalyzing && (
-          <FileUpload onFileUpload={handleFileUpload} />
-        )}
+        {!analysisData && !isAnalyzing && <FileUpload onFileUpload={handleFileUpload} />}
 
         {isAnalyzing && <LoadingStages />}
 
-        {analysisData && (
-          <ComparisonResults data={analysisData} onBackToHome={handleBackToHome} />
-        )}
+        {analysisData && <ComparisonResults data={analysisData} onBackToHome={handleBackToHome} />}
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
