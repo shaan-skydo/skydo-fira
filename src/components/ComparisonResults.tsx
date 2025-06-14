@@ -1,10 +1,17 @@
 
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, TrendingDown, ChevronDown, ChevronUp, Info, ExternalLink } from "lucide-react";
+import { ArrowLeft, TrendingDown, ChevronDown, ChevronUp, Info, ExternalLink, Edit3 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Slider } from "@/components/ui/slider";
+import { 
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useState } from "react";
 
 interface ComparisonResultsProps {
@@ -45,6 +52,33 @@ export const ComparisonResults = ({
   onBackToHome
 }: ComparisonResultsProps) => {
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
+  const [editAmount, setEditAmount] = useState([data.transactionAmount]);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+  // Calculate updated data based on new amount
+  const calculateUpdatedData = (newAmount: number) => {
+    const ratio = newAmount / data.transactionAmount;
+    
+    return {
+      currentProvider: {
+        ...data.currentProvider,
+        paymentAmount: newAmount,
+        totalOnTransaction: data.currentProvider.totalOnTransaction * ratio,
+      },
+      skydo: {
+        ...data.skydo,
+        paymentAmount: newAmount,
+        totalOnTransaction: data.skydo.totalOnTransaction * ratio,
+      },
+      savings: {
+        amount: (data.currentProvider.totalOnTransaction - data.skydo.totalOnTransaction) * ratio,
+        percentage: data.savings.percentage,
+      },
+      transactionAmount: newAmount
+    };
+  };
+
+  const updatedData = calculateUpdatedData(editAmount[0]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -89,11 +123,11 @@ export const ComparisonResults = ({
             <div className="flex items-center justify-center space-x-3 mb-4">
               <TrendingDown className="w-8 h-8 text-green-600" />
               <h2 className="text-3xl font-bold text-black">
-                You could save <span style={{ color: '#13734e' }}>{formatCurrency(data.savings.amount)}</span> with Skydo
+                You could save <span style={{ color: '#13734e' }}>{formatCurrency(updatedData.savings.amount)}</span> with Skydo
               </h2>
             </div>
             <p className="text-green-700 text-lg">
-              That's {formatPercentage(data.savings.percentage)} less than your current provider
+              That's {formatPercentage(updatedData.savings.percentage)} less than your current provider
             </p>
           </CardContent>
         </Card>
@@ -112,12 +146,60 @@ export const ComparisonResults = ({
               <CardTitle className="text-2xl text-slate-700 text-center">Current Provider</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* Payment Amount */}
+              {/* Payment Amount with Edit Button */}
               <div className="flex justify-between items-center py-2 border-b border-slate-100">
                 <span className="text-slate-600">Payment Amount</span>
-                <span className="font-semibold text-slate-800">
-                  {formatCurrency(data.currentProvider.paymentAmount)}
-                </span>
+                <div className="flex items-center space-x-2">
+                  <span className="font-semibold text-slate-800">
+                    {formatCurrency(updatedData.currentProvider.paymentAmount)}
+                  </span>
+                  <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-6 w-6 p-0 border-slate-300 hover:border-slate-400"
+                      >
+                        <Edit3 className="w-3 h-3" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Edit Payment Amount</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-6 py-4">
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Amount</span>
+                            <span className="text-lg font-bold text-[#283c8b]">
+                              {formatCurrency(editAmount[0])}
+                            </span>
+                          </div>
+                          <Slider
+                            value={editAmount}
+                            onValueChange={setEditAmount}
+                            max={500000}
+                            min={500}
+                            step={500}
+                            className="w-full"
+                          />
+                          <div className="flex justify-between text-xs text-slate-500">
+                            <span>₹500</span>
+                            <span>₹5,00,000</span>
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <Button
+                            onClick={() => setIsEditDialogOpen(false)}
+                            className="bg-[#283c8b] hover:bg-[#1e2f6b]"
+                          >
+                            Apply Changes
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </div>
 
               {data.currentProvider.charges.map((charge, index) => (
@@ -133,13 +215,13 @@ export const ComparisonResults = ({
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-slate-700">You'll receive</span>
                   <span className="font-bold text-lg text-slate-800">
-                    {formatCurrency(data.transactionAmount - data.currentProvider.totalOnTransaction)}
+                    {formatCurrency(updatedData.transactionAmount - updatedData.currentProvider.totalOnTransaction)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-500">Effective cost</span>
                   <span className="text-slate-600">
-                    {formatPercentage(data.currentProvider.effectiveCost)}
+                    {formatPercentage(updatedData.currentProvider.effectiveCost)}
                   </span>
                 </div>
               </div>
@@ -169,7 +251,7 @@ export const ComparisonResults = ({
               <div className="flex justify-between items-center py-2 border-b border-green-100">
                 <span className="text-slate-600">Payment Amount</span>
                 <span className="font-semibold text-green-700">
-                  {formatCurrency(data.skydo.paymentAmount)}
+                  {formatCurrency(updatedData.skydo.paymentAmount)}
                 </span>
               </div>
 
@@ -186,13 +268,13 @@ export const ComparisonResults = ({
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-slate-700">You'll receive</span>
                   <span className="font-bold text-lg text-green-800">
-                    {formatCurrency(data.transactionAmount - data.skydo.totalOnTransaction)}
+                    {formatCurrency(updatedData.transactionAmount - updatedData.skydo.totalOnTransaction)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-500">Effective cost</span>
                   <span className="text-green-600">
-                    {formatPercentage(data.skydo.effectiveCost)}
+                    {formatPercentage(updatedData.skydo.effectiveCost)}
                   </span>
                 </div>
               </div>
