@@ -1,4 +1,5 @@
 
+
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,7 +49,9 @@ export const ComparisonResults = ({
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'INR'
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount);
   };
 
@@ -86,7 +89,7 @@ export const ComparisonResults = ({
             <div className="flex items-center justify-center space-x-3 mb-4">
               <TrendingDown className="w-8 h-8 text-green-600" />
               <h2 className="text-3xl font-bold text-black">
-                You could save <span style={{ color: '#07472D' }}>{formatCurrency(data.savings.amount)}</span> with Skydo
+                You could save <span style={{ color: '#13734e' }}>{formatCurrency(data.savings.amount)}</span> with Skydo
               </h2>
             </div>
             <p className="text-green-700 text-lg">
@@ -276,7 +279,7 @@ export const ComparisonResults = ({
           onClick={() => window.open('https://www.skydo.com/', '_blank')}
           variant="outline"
           size="lg"
-          className="bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:border-blue-700 px-8 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+          className="bg-[#283c8b] text-white border-[#283c8b] hover:bg-[#1e2f6b] hover:border-[#1e2f6b] px-8 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
         >
           <ExternalLink className="w-5 h-5 mr-2" />
           Explore Skydo
