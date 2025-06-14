@@ -1,100 +1,138 @@
+
 import { useState } from "react";
 import { FileUpload } from "@/components/FileUpload";
 import { ComparisonResults } from "@/components/ComparisonResults";
 import { AnimatedHeaderText } from "@/components/AnimatedHeaderText";
 import { LoadingStages } from "@/components/LoadingStages";
 import { motion } from "framer-motion";
+import { uploadAndProcessFira, FiraProcessingResult } from "@/services/firaApi";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [analysisData, setAnalysisData] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const handleFileUpload = async (file: File) => {
+  const { toast } = useToast();
+
+  const handleFileUpload = async (file: File, paymentMethod: string) => {
     setUploadedFile(file);
     setIsAnalyzing(true);
 
-    // Simulate file processing with realistic timing
-    setTimeout(() => {
-      // Mock analysis data with realistic demo values
-      const mockData = {
-        currentProvider: {
-          name: "Current Bank",
-          paymentAmount: 415000, // $5000 * 83 INR (base calculation)
-          charges: [{
-            type: "FX Rate",
-            amount: 85.1937,
-            isPercentage: false
-          }, {
-            type: "Wire Fee",
-            amount: 30.00
-          }, {
-            type: "FIRA Fee",
-            amount: 5.00
-          }],
-          totalOnTransaction: 8596, // Calculated to get ₹4,21,904 received
-          effectiveCost: 1.85
-        },
-        skydo: {
-          name: "Skydo",
-          paymentAmount: 415000, // $5000 * 83 INR (base calculation)
-          charges: [{
-            type: "FX Rate",
-            amount: 86.0937,
-            isPercentage: false
-          }, {
-            type: "Wire Fee",
-            amount: 0.00
-          }, {
-            type: "FIRA Fee",
-            amount: 0.00
-          }],
-          totalOnTransaction: 2978, // Calculated to get ₹4,27,522 received
-          effectiveCost: 0.58
-        },
-        savings: {
-          amount: 5618, // Difference between what you'll receive
-          percentage: 65.4
-        },
-        transactionAmount: 415000 // Base INR amount
-      };
-      setAnalysisData(mockData);
+    try {
+      const result: FiraProcessingResult = await uploadAndProcessFira(file, paymentMethod);
+      
+      if (result.success && result.firaData) {
+        // Transform API data to match our component format
+        const transformedData = {
+          currentProvider: {
+            name: "Current Provider",
+            paymentAmount: result.firaData.inrAmount,
+            charges: [
+              {
+                type: "FX Rate",
+                amount: result.firaData.calculatedExchangeRate,
+                isPercentage: false
+              },
+              {
+                type: "Wire Fee",
+                amount: result.firaData.platformWireFee
+              },
+              {
+                type: "FIRA Fee",
+                amount: result.firaData.platformFiraFee
+              }
+            ],
+            totalOnTransaction: result.firaData.platformWireFee + result.firaData.platformFiraFee + result.firaData.platformTransactionFee,
+            effectiveCost: ((result.firaData.inrAmount - result.firaData.finalInrAmount) / result.firaData.inrAmount) * 100
+          },
+          skydo: {
+            name: "Skydo",
+            paymentAmount: result.firaData.amount * result.firaData.fxRateSkydo,
+            charges: [
+              {
+                type: "FX Rate",
+                amount: result.firaData.fxRateSkydo,
+                isPercentage: false
+              },
+              {
+                type: "Wire Fee",
+                amount: result.firaData.skydoWireFee
+              },
+              {
+                type: "FIRA Fee",
+                amount: result.firaData.skydoFiraFee
+              }
+            ],
+            totalOnTransaction: result.firaData.skydoWireFee + result.firaData.skydoFiraFee + result.firaData.transactionSkydoFee,
+            effectiveCost: ((result.firaData.amount * result.firaData.fxRateSkydo - result.firaData.finalInrAmountSkydo) / (result.firaData.amount * result.firaData.fxRateSkydo)) * 100
+          },
+          savings: {
+            amount: result.firaData.finalInrAmountSkydo - result.firaData.finalInrAmount,
+            percentage: ((result.firaData.finalInrAmountSkydo - result.firaData.finalInrAmount) / result.firaData.finalInrAmount) * 100
+          },
+          transactionAmount: result.firaData.inrAmount,
+          originalAmount: result.firaData.amount,
+          currency: result.firaData.currency
+        };
+        
+        setAnalysisData(transformedData);
+        toast({
+          title: "Analysis Complete",
+          description: "Your FIRA document has been successfully analyzed.",
+        });
+      } else {
+        throw new Error(result.message || "Failed to process FIRA document");
+      }
+    } catch (error) {
+      console.error('Error processing FIRA file:', error);
+      toast({
+        title: "Processing Failed",
+        description: error instanceof Error ? error.message : "Failed to process the FIRA document. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsAnalyzing(false);
-    }, 8000); // Extended timing for loading stages
+    }
   };
+
   const handleBackToHome = () => {
     setUploadedFile(null);
     setAnalysisData(null);
     setIsAnalyzing(false);
   };
+
   const handleLogoClick = () => {
     handleBackToHome();
   };
-  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
         {/* Skydo Logo - Left aligned */}
-        <motion.div initial={{
-        opacity: 0,
-        y: -20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.5
-      }} className="flex justify-start top-6 z-10 mb-8">
-          <button onClick={handleLogoClick} className="hover:opacity-80 transition-opacity duration-200">
-            <img src="/lovable-uploads/8a593f9d-5b27-4492-ab02-1b13c5699292.png" alt="Skydo Logo" className="h-9 w-auto" />
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-start top-6 z-10 mb-8"
+        >
+          <button 
+            onClick={handleLogoClick}
+            className="hover:opacity-80 transition-opacity duration-200"
+          >
+            <img 
+              src="/lovable-uploads/8a593f9d-5b27-4492-ab02-1b13c5699292.png" 
+              alt="Skydo Logo" 
+              className="h-9 w-auto" 
+            />
           </button>
         </motion.div>
 
-        <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.6
-      }} className="text-center mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
           <h1 className="text-5xl font-bold text-slate-800 mb-4">
             Find Hidden Costs in Your{" "}
             <AnimatedHeaderText />
@@ -105,13 +143,21 @@ const Index = () => {
           </p>
         </motion.div>
 
-        {!analysisData && !isAnalyzing && <FileUpload onFileUpload={handleFileUpload} />}
+        {!analysisData && !isAnalyzing && (
+          <FileUpload onFileUpload={handleFileUpload} />
+        )}
 
         {isAnalyzing && <LoadingStages />}
 
-        {analysisData && <ComparisonResults data={analysisData} onBackToHome={handleBackToHome} />}
+        {analysisData && (
+          <ComparisonResults 
+            data={analysisData} 
+            onBackToHome={handleBackToHome} 
+          />
+        )}
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default Index;

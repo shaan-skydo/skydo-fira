@@ -1,3 +1,4 @@
+
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, FileText, CheckCircle } from "lucide-react";
@@ -5,15 +6,17 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 interface FileUploadProps {
-  onFileUpload: (file: File) => void;
+  onFileUpload: (file: File, paymentMethod: string) => void;
 }
 
 export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const { toast } = useToast();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -34,7 +37,7 @@ export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
 
   const handleAnalyze = () => {
     if (uploadedFile && acceptedTerms && paymentMethod) {
-      onFileUpload(uploadedFile);
+      onFileUpload(uploadedFile, paymentMethod);
     }
   };
 
@@ -122,11 +125,11 @@ export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
                 <SelectValue placeholder="Select payment method" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-slate-200 shadow-lg z-50">
-                <SelectItem value="bank">Bank</SelectItem>
-                <SelectItem value="paypal">Paypal</SelectItem>
-                <SelectItem value="payoneer">Payoneer</SelectItem>
-                <SelectItem value="wise">Wise</SelectItem>
-                <SelectItem value="others">Others</SelectItem>
+                <SelectItem value="BANK">Bank</SelectItem>
+                <SelectItem value="PAYPAL">Paypal</SelectItem>
+                <SelectItem value="PAYONEER">Payoneer</SelectItem>
+                <SelectItem value="WISE">Wise</SelectItem>
+                <SelectItem value="OTHERS">Others</SelectItem>
               </SelectContent>
             </Select>
           </div>

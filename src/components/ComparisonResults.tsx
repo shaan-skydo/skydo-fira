@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,6 +36,8 @@ interface ComparisonResultsProps {
       percentage: number;
     };
     transactionAmount: number;
+    originalAmount?: number;
+    currency?: string;
   };
   onBackToHome: () => void;
 }
@@ -46,18 +47,19 @@ export const ComparisonResults = ({
   onBackToHome
 }: ComparisonResultsProps) => {
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
-  // Convert initial amount to USD for the slider (using 5000 as base)
-  const initialUSDAmount = 5000;
-  const [editAmount, setEditAmount] = useState([initialUSDAmount]);
+  // Use original amount from API if available, fallback to 5000
+  const initialAmount = data.originalAmount || 5000;
+  const currency = data.currency || 'USD';
+  const [editAmount, setEditAmount] = useState([initialAmount]);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  // Calculate updated data based on new USD amount
-  const calculateUpdatedData = (newUSDAmount: number) => {
-    const ratio = newUSDAmount / 5000; // Base ratio from $5000
+  // Calculate updated data based on new amount
+  const calculateUpdatedData = (newAmount: number) => {
+    const ratio = newAmount / initialAmount;
     
-    // Calculate INR amounts using the respective FX rates
-    const currentProviderINR = newUSDAmount * 85.19;
-    const skydoINR = newUSDAmount * 86.09;
+    // Calculate amounts using the respective FX rates
+    const currentProviderINR = newAmount * (data.currentProvider.charges.find(c => c.type === "FX Rate")?.amount || 85.19);
+    const skydoINR = newAmount * (data.skydo.charges.find(c => c.type === "FX Rate")?.amount || 86.09);
     
     // Calculate fees proportionally
     const currentProviderFees = (data.currentProvider.totalOnTransaction * ratio);
@@ -75,7 +77,7 @@ export const ComparisonResults = ({
         totalOnTransaction: skydoFees
       },
       savings: {
-        amount: (currentProviderINR - currentProviderFees) - (skydoINR - skydoFees),
+        amount: (skydoINR - skydoFees) - (currentProviderINR - currentProviderFees),
         percentage: data.savings.percentage
       },
       transactionAmount: currentProviderINR
@@ -91,23 +93,25 @@ export const ComparisonResults = ({
       maximumFractionDigits: 0
     }).format(amount);
   };
-  const formatUSD = (amount: number) => {
+
+  const formatOriginalCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: currency,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);
   };
+
   const formatPercentage = (value: number) => {
-    return `${value}%`;
+    return `${value.toFixed(2)}%`;
   };
 
   const formatChargeAmount = (charge: any) => {
     if (charge.type === "FX Rate") {
       return `₹${charge.amount}`;
     } else if (charge.type === "Wire Fee" || charge.type === "FIRA Fee") {
-      return charge.amount === 0 ? "FREE" : formatUSD(charge.amount);
+      return charge.amount === 0 ? "FREE" : formatOriginalCurrency(charge.amount);
     }
     return charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount);
   };
@@ -153,7 +157,7 @@ export const ComparisonResults = ({
               </h2>
             </div>
             <p className="text-green-700 text-lg">
-              That's {formatPercentage(updatedData.savings.percentage)} less than your current provider
+              That's {formatPercentage(Math.abs(updatedData.savings.percentage))} more than your current provider
             </p>
           </CardContent>
         </Card>
@@ -181,7 +185,7 @@ export const ComparisonResults = ({
                 <span className="text-slate-600">Foreign Currency Amount</span>
                 <div className="flex items-center space-x-2">
                   <span className="font-semibold text-slate-800">
-                    {formatUSD(editAmount[0])}
+                    {formatOriginalCurrency(editAmount[0])}
                   </span>
                   <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                     <DialogTrigger asChild>
@@ -198,22 +202,27 @@ export const ComparisonResults = ({
                           <div className="flex justify-between items-center">
                             <span className="text-sm font-medium">Amount</span>
                             <span className="text-lg font-bold text-[#283c8b]">
-                              {new Intl.NumberFormat('en-US', {
-                                style: 'currency',
-                                currency: 'USD',
-                                minimumFractionDigits: 0,
-                                maximumFractionDigits: 0
-                              }).format(editAmount[0])}
+                              {formatOriginalCurrency(editAmount[0])}
                             </span>
                           </div>
-                          <Slider value={editAmount} onValueChange={setEditAmount} max={300000} min={500} step={500} className="w-full" />
+                          <Slider 
+                            value={editAmount} 
+                            onValueChange={setEditAmount} 
+                            max={300000} 
+                            min={500} 
+                            step={500} 
+                            className="w-full" 
+                          />
                           <div className="flex justify-between text-xs text-slate-500">
-                            <span>$500</span>
-                            <span>$300K</span>
+                            <span>{currency === 'USD' ? '$500' : '500'}</span>
+                            <span>{currency === 'USD' ? '$300K' : '300K'}</span>
                           </div>
                         </div>
                         <div className="text-center">
-                          <Button onClick={() => setIsEditDialogOpen(false)} className="bg-[#283c8b] hover:bg-[#1e2f6b]">
+                          <Button 
+                            onClick={() => setIsEditDialogOpen(false)}
+                            className="bg-[#283c8b] hover:bg-[#1e2f6b]"
+                          >
                             Apply Changes
                           </Button>
                         </div>
@@ -270,7 +279,7 @@ export const ComparisonResults = ({
               <div className="flex justify-between items-center py-2 border-b border-green-100">
                 <span className="text-slate-600">Foreign Currency Amount</span>
                 <span className="font-semibold text-green-700">
-                  {formatUSD(editAmount[0])}
+                  {formatOriginalCurrency(editAmount[0])}
                 </span>
               </div>
 
