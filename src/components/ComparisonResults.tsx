@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, TrendingDown, DollarSign } from "lucide-react";
+
 interface ComparisonResultsProps {
   data: {
     currentProvider: {
@@ -32,36 +33,36 @@ interface ComparisonResultsProps {
   };
   onBackToHome: () => void;
 }
+
 export const ComparisonResults = ({
   data,
   onBackToHome
 }: ComparisonResultsProps) => {
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR'
     }).format(amount);
   };
+
   const formatPercentage = (value: number) => {
     return `${value}%`;
   };
-  return <motion.div initial={{
-    opacity: 0,
-    y: 20
-  }} animate={{
-    opacity: 1,
-    y: 0
-  }} transition={{
-    duration: 0.6
-  }} className="max-w-6xl mx-auto space-y-8">
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="max-w-6xl mx-auto space-y-8"
+    >
       {/* Savings Header */}
-      <motion.div initial={{
-      scale: 0.9
-    }} animate={{
-      scale: 1
-    }} transition={{
-      delay: 0.2
-    }} className="text-center">
+      <motion.div
+        initial={{ scale: 0.9 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 0.2 }}
+        className="text-center"
+      >
         <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 shadow-lg">
           <CardContent className="pt-8 pb-6">
             <div className="flex items-center justify-center space-x-3 mb-4">
@@ -80,26 +81,24 @@ export const ComparisonResults = ({
       {/* Comparison Grid */}
       <div className="grid md:grid-cols-2 gap-8">
         {/* Current Provider */}
-        <motion.div initial={{
-        opacity: 0,
-        x: -50
-      }} animate={{
-        opacity: 1,
-        x: 0
-      }} transition={{
-        delay: 0.4
-      }}>
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4 }}
+        >
           <Card className="h-full shadow-lg border-slate-200">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-slate-700 text-center">Current Provider</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {data.currentProvider.charges.map((charge, index) => <div key={index} className="flex justify-between items-center py-2 border-b border-slate-100">
+              {data.currentProvider.charges.map((charge, index) => (
+                <div key={index} className="flex justify-between items-center py-2 border-b border-slate-100">
                   <span className="text-slate-600">{charge.type}</span>
                   <span className="font-semibold text-slate-800">
                     {charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount)}
                   </span>
-                </div>)}
+                </div>
+              ))}
               
               <div className="pt-4 space-y-3 border-t border-slate-200">
                 <div className="flex justify-between items-center">
@@ -120,15 +119,11 @@ export const ComparisonResults = ({
         </motion.div>
 
         {/* Skydo */}
-        <motion.div initial={{
-        opacity: 0,
-        x: 50
-      }} animate={{
-        opacity: 1,
-        x: 0
-      }} transition={{
-        delay: 0.4
-      }}>
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4 }}
+        >
           <Card className="h-full shadow-lg border-green-200 bg-gradient-to-br from-white to-green-50">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-green-700 text-center flex items-center justify-center space-x-2">
@@ -137,12 +132,14 @@ export const ComparisonResults = ({
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {data.skydo.charges.map((charge, index) => <div key={index} className="flex justify-between items-center py-2 border-b border-green-100">
+              {data.skydo.charges.map((charge, index) => (
+                <div key={index} className="flex justify-between items-center py-2 border-b border-green-100">
                   <span className="text-slate-600">{charge.type}</span>
                   <span className="font-semibold text-green-700">
                     {charge.amount === 0 ? "FREE" : charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount)}
                   </span>
-                </div>)}
+                </div>
+              ))}
               
               <div className="pt-4 space-y-3 border-t border-green-200">
                 <div className="flex justify-between items-center">
@@ -164,17 +161,22 @@ export const ComparisonResults = ({
       </div>
 
       {/* Back to Home Button */}
-      <motion.div initial={{
-      opacity: 0
-    }} animate={{
-      opacity: 1
-    }} transition={{
-      delay: 0.8
-    }} className="text-center">
-        <Button onClick={onBackToHome} variant="outline" size="lg" className="bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:border-blue-700 px-8 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="text-center"
+      >
+        <Button
+          onClick={onBackToHome}
+          variant="outline"
+          size="lg"
+          className="bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:border-blue-700 px-8 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+        >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Home
         </Button>
       </motion.div>
-    </motion.div>;
+    </motion.div>
+  );
 };
