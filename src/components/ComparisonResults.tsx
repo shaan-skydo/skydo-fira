@@ -61,7 +61,7 @@ export const ComparisonResults = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="max-w-6xl mx-auto space-y-8 relative pt-16"
+      className="max-w-6xl mx-auto space-y-8 relative pt-6"
     >
       {/* Enhanced Glassmorphic Back Button */}
       <motion.button
@@ -69,7 +69,7 @@ export const ComparisonResults = ({
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
         onClick={onBackToHome}
-        className="fixed top-8 left-8 z-50 w-14 h-14 rounded-full backdrop-blur-xl bg-white/30 border border-white/40 shadow-2xl hover:bg-white/40 hover:scale-105 hover:shadow-3xl transition-all duration-300 flex items-center justify-center group before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r before:from-white/20 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+        className="fixed top-20 left-8 z-50 w-14 h-14 rounded-full backdrop-blur-xl bg-white/30 border border-white/40 shadow-2xl hover:bg-white/40 hover:scale-105 hover:shadow-3xl transition-all duration-300 flex items-center justify-center group before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r before:from-white/20 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
       >
         <ArrowLeft className="w-6 h-6 text-slate-800 group-hover:text-slate-900 transition-all duration-300 relative z-10 drop-shadow-sm" />
       </motion.button>
@@ -198,7 +198,7 @@ export const ComparisonResults = ({
         </motion.div>
       </div>
 
-      {/* Skydo Features Collapsible - Moved here */}
+      {/* Skydo Features Collapsible */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
