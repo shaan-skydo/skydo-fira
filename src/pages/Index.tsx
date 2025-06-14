@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { FileUpload } from "@/components/FileUpload";
 import { ComparisonResults } from "@/components/ComparisonResults";
+import { AnimatedHeaderText } from "@/components/AnimatedHeaderText";
+import { LoadingStages } from "@/components/LoadingStages";
 import { motion } from "framer-motion";
 
 const Index = () => {
@@ -13,7 +15,7 @@ const Index = () => {
     setUploadedFile(file);
     setIsAnalyzing(true);
     
-    // Simulate file processing
+    // Simulate file processing with realistic timing
     setTimeout(() => {
       // Mock analysis data - in real implementation, this would parse the FIRA file
       const mockData = {
@@ -48,7 +50,7 @@ const Index = () => {
       
       setAnalysisData(mockData);
       setIsAnalyzing(false);
-    }, 3000);
+    }, 8000); // Extended timing for loading stages
   };
 
   const handleBackToHome = () => {
@@ -57,9 +59,32 @@ const Index = () => {
     setIsAnalyzing(false);
   };
 
+  const handleLogoClick = () => {
+    handleBackToHome();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
+        {/* Skydo Logo */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="absolute top-6 left-6 z-10"
+        >
+          <button 
+            onClick={handleLogoClick}
+            className="hover:opacity-80 transition-opacity duration-200"
+          >
+            <img 
+              src="/lovable-uploads/8a593f9d-5b27-4492-ab02-1b13c5699292.png" 
+              alt="Skydo Logo" 
+              className="h-8 w-auto"
+            />
+          </button>
+        </motion.div>
+
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -68,7 +93,8 @@ const Index = () => {
         >
           <h1 className="text-5xl font-bold text-slate-800 mb-6">
             Find Hidden Costs in Your{" "}
-            <span className="text-blue-600">FIRA</span> Document
+            <AnimatedHeaderText />
+            {" "}Document
           </h1>
           <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
             Upload your FIRA/FIRC file to instantly compare your current provider's exchange
@@ -81,15 +107,7 @@ const Index = () => {
         )}
 
         {isAnalyzing && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-6"></div>
-            <h3 className="text-2xl font-semibold text-slate-700 mb-2">Analyzing your FIRA document...</h3>
-            <p className="text-slate-500">This may take a few moments</p>
-          </motion.div>
+          <LoadingStages />
         )}
 
         {analysisData && (

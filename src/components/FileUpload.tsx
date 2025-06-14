@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { Upload, FileText, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
@@ -11,6 +12,7 @@ interface FileUploadProps {
 
 export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -30,10 +32,12 @@ export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   });
 
   const handleAnalyze = () => {
-    if (uploadedFile) {
+    if (uploadedFile && acceptedTerms) {
       onFileUpload(uploadedFile);
     }
   };
+
+  const canAnalyze = uploadedFile && acceptedTerms;
 
   return (
     <motion.div 
@@ -105,15 +109,56 @@ export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mt-8 text-center"
+          className="mt-6 space-y-6"
         >
-          <Button 
-            onClick={handleAnalyze}
-            size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            Analyze Document
-          </Button>
+          {/* Terms & Conditions Checkbox */}
+          <div className="flex items-start space-x-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <Checkbox
+              id="terms"
+              checked={acceptedTerms}
+              onCheckedChange={(checked) => setAcceptedTerms(checked as boolean)}
+              className="mt-1"
+            />
+            <label htmlFor="terms" className="text-sm text-slate-600 cursor-pointer">
+              I agree to the{" "}
+              <a 
+                href="#" 
+                className="text-blue-600 hover:text-blue-800 underline"
+                onClick={(e) => e.preventDefault()}
+              >
+                Terms & Conditions
+              </a>{" "}
+              and{" "}
+              <a 
+                href="#" 
+                className="text-blue-600 hover:text-blue-800 underline"
+                onClick={(e) => e.preventDefault()}
+              >
+                Privacy Policy
+              </a>. 
+              I understand that my file will be processed securely and used only for analysis purposes.
+            </label>
+          </div>
+
+          <div className="text-center">
+            <Button 
+              onClick={handleAnalyze}
+              disabled={!canAnalyze}
+              size="lg"
+              className={`px-8 py-3 text-lg font-semibold rounded-xl shadow-lg transition-all duration-200 ${
+                canAnalyze
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-xl'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              Analyze Document
+            </Button>
+            {uploadedFile && !acceptedTerms && (
+              <p className="text-sm text-slate-500 mt-2">
+                Please accept the terms & conditions to continue
+              </p>
+            )}
+          </div>
         </motion.div>
       )}
     </motion.div>
