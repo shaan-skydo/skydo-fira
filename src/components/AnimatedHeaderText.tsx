@@ -20,15 +20,14 @@ export const AnimatedHeaderText = () => {
       <AnimatePresence mode="wait">
         <motion.span
           key={currentWordIndex}
-          initial={{ opacity: 0, y: 20, rotateX: 90 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          exit={{ opacity: 0, y: -20, rotateX: -90 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           transition={{ 
-            duration: 0.5,
+            duration: 0.3,
             ease: "easeInOut"
           }}
           className="text-blue-600 inline-block"
-          style={{ transformOrigin: "center" }}
         >
           {words[currentWordIndex]}
         </motion.span>
