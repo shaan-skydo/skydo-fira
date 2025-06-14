@@ -22,8 +22,8 @@ const Index = () => {
           paymentAmount: 50000,
           charges: [{
             type: "FX Margin",
-            amount: 2.5,
-            isPercentage: true
+            amount: 83.4,
+            isPercentage: false
           }, {
             type: "Wire Fee",
             amount: 25.00
@@ -39,8 +39,8 @@ const Index = () => {
           paymentAmount: 50000,
           charges: [{
             type: "FX Margin",
-            amount: 0.5,
-            isPercentage: true
+            amount: 0,
+            isPercentage: false
           }, {
             type: "Wire Fee",
             amount: 3.00
