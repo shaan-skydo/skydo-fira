@@ -80,7 +80,7 @@ const Index = () => {
             <img 
               src="/lovable-uploads/8a593f9d-5b27-4492-ab02-1b13c5699292.png" 
               alt="Skydo Logo" 
-              className="h-8 w-auto"
+              className="h-12 w-auto"
             />
           </button>
         </motion.div>
@@ -89,7 +89,7 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-12 mt-8"
         >
           <h1 className="text-5xl font-bold text-slate-800 mb-6">
             Find Hidden Costs in Your{" "}
