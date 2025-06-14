@@ -75,14 +75,14 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50/30 to-skydo-blue/5">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
         {/* Skydo Logo - Centered */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex justify-center mb-8"
+          className="flex justify-center top-6 z-10 mb-8"
         >
           <button
             onClick={handleLogoClick}
@@ -91,7 +91,7 @@ const Index = () => {
             <img
               src="/lovable-uploads/8a593f9d-5b27-4492-ab02-1b13c5699292.png"
               alt="Skydo Logo"
-              className="h-10 w-auto"
+              className="h-8 w-auto"
             />
           </button>
         </motion.div>
@@ -102,12 +102,12 @@ const Index = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl font-bold text-skydo-gray mb-4 leading-tight">
+          <h1 className="text-5xl font-bold text-slate-800 mb-4">
             Find Hidden Costs in Your{" "}
             <AnimatedHeaderText />
             {" "}Document
           </h1>
-          <p className="text-xl text-skydo-gray-light max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
             Upload your FIRA document to instantly compare your provider's exchange rate against the live market rate offered by Skydo.
           </p>
         </motion.div>

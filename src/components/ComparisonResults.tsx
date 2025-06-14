@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -69,9 +68,9 @@ export const ComparisonResults = ({
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
         onClick={onBackToHome}
-        className="fixed top-32 left-8 z-50 w-14 h-14 rounded-full backdrop-blur-xl bg-white/30 border border-white/40 shadow-2xl hover:bg-white/40 hover:scale-105 hover:shadow-3xl transition-all duration-300 flex items-center justify-center group before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r before:from-white/20 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+        className="fixed top-20 left-8 z-50 w-14 h-14 rounded-full backdrop-blur-xl bg-white/30 border border-white/40 shadow-2xl hover:bg-white/40 hover:scale-105 hover:shadow-3xl transition-all duration-300 flex items-center justify-center group before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r before:from-white/20 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
       >
-        <ArrowLeft className="w-6 h-6 text-skydo-gray group-hover:text-skydo-gray-light transition-all duration-300 relative z-10 drop-shadow-sm" />
+        <ArrowLeft className="w-6 h-6 text-slate-800 group-hover:text-slate-900 transition-all duration-300 relative z-10 drop-shadow-sm" />
       </motion.button>
 
       {/* Savings Header */}
@@ -81,15 +80,15 @@ export const ComparisonResults = ({
         transition={{ delay: 0.2 }}
         className="text-center"
       >
-        <Card className="bg-gradient-to-r from-skydo-green/10 to-skydo-green/5 border-skydo-green/20 skydo-card-shadow">
+        <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 shadow-lg">
           <CardContent className="pt-8 pb-6">
             <div className="flex items-center justify-center space-x-3 mb-4">
-              <TrendingDown className="w-8 h-8 text-skydo-green" />
-              <h2 className="text-3xl font-bold text-skydo-green">
+              <TrendingDown className="w-8 h-8 text-green-600" />
+              <h2 className="text-3xl font-bold text-green-800">
                 You could save {formatCurrency(data.savings.amount)} with Skydo
               </h2>
             </div>
-            <p className="text-skydo-green text-lg font-medium">
+            <p className="text-green-700 text-lg">
               That's {formatPercentage(data.savings.percentage)} less than your current provider
             </p>
           </CardContent>
@@ -104,38 +103,38 @@ export const ComparisonResults = ({
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="h-full skydo-card-shadow border-gray-200">
+          <Card className="h-full shadow-lg border-slate-200">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-skydo-gray text-center">Current Provider</CardTitle>
+              <CardTitle className="text-2xl text-slate-700 text-center">Current Provider</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Payment Amount */}
-              <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                <span className="text-skydo-gray-light">Payment Amount</span>
-                <span className="font-semibold text-skydo-gray">
+              <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                <span className="text-slate-600">Payment Amount</span>
+                <span className="font-semibold text-slate-800">
                   {formatCurrency(data.currentProvider.paymentAmount)}
                 </span>
               </div>
 
               {data.currentProvider.charges.map((charge, index) => (
-                <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100">
-                  <span className="text-skydo-gray-light">{charge.type}</span>
-                  <span className="font-semibold text-skydo-gray">
+                <div key={index} className="flex justify-between items-center py-2 border-b border-slate-100">
+                  <span className="text-slate-600">{charge.type}</span>
+                  <span className="font-semibold text-slate-800">
                     {charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount)}
                   </span>
                 </div>
               ))}
               
-              <div className="pt-4 space-y-3 border-t border-gray-200">
+              <div className="pt-4 space-y-3 border-t border-slate-200">
                 <div className="flex justify-between items-center">
-                  <span className="font-medium text-skydo-gray">You'll receive</span>
-                  <span className="font-bold text-lg text-skydo-gray">
+                  <span className="font-medium text-slate-700">You'll receive</span>
+                  <span className="font-bold text-lg text-slate-800">
                     {formatCurrency(data.transactionAmount - data.currentProvider.totalOnTransaction)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-skydo-gray-light">Effective cost</span>
-                  <span className="text-skydo-gray-light">
+                  <span className="text-slate-500">Effective cost</span>
+                  <span className="text-slate-600">
                     {formatPercentage(data.currentProvider.effectiveCost)}
                   </span>
                 </div>
@@ -150,9 +149,9 @@ export const ComparisonResults = ({
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="h-full skydo-card-shadow border-skydo-blue/20 bg-gradient-to-br from-white to-skydo-blue/5">
+          <Card className="h-full shadow-lg border-green-200 bg-gradient-to-br from-white to-green-50">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-skydo-blue text-center flex items-center justify-center space-x-2">
+              <CardTitle className="text-2xl text-green-700 text-center flex items-center justify-center space-x-2">
                 <img 
                   src="/lovable-uploads/07586f70-3dc6-4a36-9683-1478e37a92d3.png" 
                   alt="Skydo Logo" 
@@ -163,34 +162,32 @@ export const ComparisonResults = ({
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Payment Amount */}
-              <div className="flex justify-between items-center py-2 border-b border-skydo-blue/10">
-                <span className="text-skydo-gray-light">Payment Amount</span>
-                <span className="font-semibold text-skydo-blue">
+              <div className="flex justify-between items-center py-2 border-b border-green-100">
+                <span className="text-slate-600">Payment Amount</span>
+                <span className="font-semibold text-green-700">
                   {formatCurrency(data.skydo.paymentAmount)}
                 </span>
               </div>
 
               {data.skydo.charges.map((charge, index) => (
-                <div key={index} className="flex justify-between items-center py-2 border-b border-skydo-blue/10">
-                  <span className="text-skydo-gray-light">{charge.type}</span>
-                  <span className="font-semibold text-skydo-blue">
-                    {charge.amount === 0 ? (
-                      <span className="text-skydo-green font-bold">FREE</span>
-                    ) : charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount)}
+                <div key={index} className="flex justify-between items-center py-2 border-b border-green-100">
+                  <span className="text-slate-600">{charge.type}</span>
+                  <span className="font-semibold text-green-700">
+                    {charge.amount === 0 ? "FREE" : charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount)}
                   </span>
                 </div>
               ))}
               
-              <div className="pt-4 space-y-3 border-t border-skydo-blue/20">
+              <div className="pt-4 space-y-3 border-t border-green-200">
                 <div className="flex justify-between items-center">
-                  <span className="font-medium text-skydo-gray">You'll receive</span>
-                  <span className="font-bold text-lg text-skydo-blue">
+                  <span className="font-medium text-slate-700">You'll receive</span>
+                  <span className="font-bold text-lg text-green-800">
                     {formatCurrency(data.transactionAmount - data.skydo.totalOnTransaction)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-skydo-gray-light">Effective cost</span>
-                  <span className="text-skydo-blue">
+                  <span className="text-slate-500">Effective cost</span>
+                  <span className="text-green-600">
                     {formatPercentage(data.skydo.effectiveCost)}
                   </span>
                 </div>
@@ -207,11 +204,11 @@ export const ComparisonResults = ({
         transition={{ delay: 0.6 }}
       >
         <Collapsible open={isFeaturesOpen} onOpenChange={setIsFeaturesOpen}>
-          <Card className="border-skydo-blue/20 bg-gradient-to-r from-skydo-blue/5 to-white skydo-card-shadow">
+          <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-sky-50">
             <CollapsibleTrigger asChild>
-              <CardHeader className="cursor-pointer hover:bg-skydo-blue/5 transition-colors">
+              <CardHeader className="cursor-pointer hover:bg-blue-100/50 transition-colors">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-xl text-skydo-blue flex items-center space-x-2">
+                  <CardTitle className="text-xl text-blue-800 flex items-center space-x-2">
                     <img 
                       src="/lovable-uploads/07586f70-3dc6-4a36-9683-1478e37a92d3.png" 
                       alt="Skydo Logo" 
@@ -220,9 +217,9 @@ export const ComparisonResults = ({
                     <span>Why Choose Skydo?</span>
                   </CardTitle>
                   {isFeaturesOpen ? (
-                    <ChevronUp className="w-5 h-5 text-skydo-blue" />
+                    <ChevronUp className="w-5 h-5 text-blue-600" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-skydo-blue" />
+                    <ChevronDown className="w-5 h-5 text-blue-600" />
                   )}
                 </div>
               </CardHeader>
@@ -230,33 +227,33 @@ export const ComparisonResults = ({
             <CollapsibleContent>
               <CardContent className="pt-0 pb-6">
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-skydo-blue/10 skydo-card-shadow">
-                    <span className="text-skydo-blue font-medium">Transparent pricing</span>
+                  <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-blue-100">
+                    <span className="text-blue-700 font-medium">Transparent pricing</span>
                     <a 
                       href="https://www.skydo.com/" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center w-5 h-5 bg-skydo-blue/10 rounded-full hover:bg-skydo-blue/20 transition-colors"
+                      className="flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full hover:bg-blue-200 transition-colors"
                     >
-                      <Info className="w-3 h-3 text-skydo-blue" />
+                      <Info className="w-3 h-3 text-blue-600" />
                     </a>
                   </div>
                   
-                  <div className="p-3 bg-white rounded-lg border border-skydo-blue/10 skydo-card-shadow">
-                    <span className="text-skydo-blue font-medium">Zero forex markup</span>
+                  <div className="p-3 bg-white rounded-lg border border-blue-100">
+                    <span className="text-blue-700 font-medium">Zero forex markup</span>
                   </div>
                   
-                  <div className="p-3 bg-white rounded-lg border border-skydo-blue/10 skydo-card-shadow">
-                    <span className="text-skydo-blue font-medium">Free and instant FIRA/FIRC</span>
+                  <div className="p-3 bg-white rounded-lg border border-blue-100">
+                    <span className="text-blue-700 font-medium">Free and instant FIRA/FIRC</span>
                   </div>
                   
-                  <div className="p-3 bg-white rounded-lg border border-skydo-blue/10 skydo-card-shadow">
-                    <span className="text-skydo-blue font-medium">Personalised dashboard with invoicing and analytics</span>
+                  <div className="p-3 bg-white rounded-lg border border-blue-100">
+                    <span className="text-blue-700 font-medium">Personalised dashboard with invoicing and analytics</span>
                   </div>
                   
-                  <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-skydo-blue/10 skydo-card-shadow">
-                    <span className="text-skydo-blue font-medium">Support for payment via Links</span>
-                    <span className="px-2 py-1 bg-skydo-green/10 text-skydo-green text-xs font-semibold rounded-full border border-skydo-green/20">
+                  <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-blue-100">
+                    <span className="text-blue-700 font-medium">Support for payment via Links</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full border border-green-200">
                       NEW
                     </span>
                   </div>
@@ -276,8 +273,9 @@ export const ComparisonResults = ({
       >
         <Button
           onClick={() => window.open('https://www.skydo.com/', '_blank')}
-          className="bg-skydo-blue hover:bg-skydo-blue-dark text-white border-0 px-8 py-3 text-lg font-semibold rounded-xl skydo-card-shadow hover:shadow-xl transition-all duration-200"
+          variant="outline"
           size="lg"
+          className="bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:border-blue-700 px-8 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
         >
           <ExternalLink className="w-5 h-5 mr-2" />
           Explore Skydo
