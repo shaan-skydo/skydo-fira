@@ -91,6 +91,16 @@ export const ComparisonResults = ({
   const formatPercentage = (value: number) => {
     return `${value}%`;
   };
+
+  const formatChargeAmount = (charge: any) => {
+    if (charge.type === "FX Rate") {
+      return charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount);
+    } else if (charge.type === "Wire Fee" || charge.type === "FIRA Fee") {
+      return formatUSD(charge.amount);
+    }
+    return charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount);
+  };
+
   return <motion.div initial={{
     opacity: 0,
     y: 20
@@ -198,9 +208,9 @@ export const ComparisonResults = ({
               </div>
 
               {data.currentProvider.charges.map((charge, index) => <div key={index} className="flex justify-between items-center py-2 border-b border-slate-100">
-                  <span className="text-slate-600">{charge.type}</span>
+                  <span className="text-slate-600">{charge.type === "FX Margin" ? "FX Rate" : charge.type}</span>
                   <span className="font-semibold text-slate-800">
-                    {charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount)}
+                    {formatChargeAmount({...charge, type: charge.type === "FX Margin" ? "FX Rate" : charge.type})}
                   </span>
                 </div>)}
               
@@ -249,9 +259,16 @@ export const ComparisonResults = ({
               </div>
 
               {data.skydo.charges.map((charge, index) => <div key={index} className="flex justify-between items-center py-2 border-b border-green-100">
-                  <span className="text-slate-600">{charge.type}</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-slate-600">{charge.type === "FX Margin" ? "FX Rate" : charge.type}</span>
+                    {charge.type === "FX Margin" && (
+                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full border border-green-200">
+                        0 Margin
+                      </span>
+                    )}
+                  </div>
                   <span className="font-semibold text-green-700">
-                    {charge.amount === 0 ? "FREE" : charge.isPercentage ? formatPercentage(charge.amount) : formatCurrency(charge.amount)}
+                    {charge.type === "FX Margin" ? "₹0" : charge.amount === 0 ? "FREE" : formatChargeAmount({...charge, type: charge.type === "FX Margin" ? "FX Rate" : charge.type})}
                   </span>
                 </div>)}
               
