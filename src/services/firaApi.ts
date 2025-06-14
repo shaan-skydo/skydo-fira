@@ -30,6 +30,11 @@ export const uploadAndProcessFira = async (
   paymentMethod: string,
   importerId?: number
 ): Promise<FiraProcessingResult> => {
+  console.log('Starting API call to:', 'https://d81f-106-51-85-199.ngrok-free.app/api/v1/fira/upload');
+  console.log('File:', file.name, 'Size:', file.size, 'Type:', file.type);
+  console.log('Payment Method:', paymentMethod);
+  console.log('Importer ID:', importerId);
+
   const formData = new FormData();
   formData.append('file', file);
   formData.append('paymentMethod', paymentMethod);
@@ -37,6 +42,8 @@ export const uploadAndProcessFira = async (
   if (importerId) {
     formData.append('importerId', importerId.toString());
   }
+
+  console.log('FormData prepared, making fetch request...');
 
   try {
     const response = await fetch('https://d81f-106-51-85-199.ngrok-free.app/api/v1/fira/upload', {
@@ -47,14 +54,25 @@ export const uploadAndProcessFira = async (
       body: formData,
     });
 
+    console.log('Response received:', response.status, response.statusText);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      console.error('Response not OK:', response.status, errorText);
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
     }
 
     const result: FiraProcessingResult = await response.json();
+    console.log('API response parsed successfully:', result);
     return result;
   } catch (error) {
-    console.error('Error uploading FIRA file:', error);
-    throw error;
+    console.error('Fetch error details:', error);
+    console.error('Error type:', typeof error);
+    console.error('Error message:', error instanceof Error ? error.message : 'Unknown error');
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    
+    // Re-throw with more context
+    throw new Error(`Failed to upload FIRA file: ${error instanceof Error ? error.message : 'Network error'}`);
   }
 };
