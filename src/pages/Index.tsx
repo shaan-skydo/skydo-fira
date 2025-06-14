@@ -22,14 +22,14 @@ const Index = () => {
           paymentAmount: 5000,
           charges: [{
             type: "FX Margin",
-            amount: 83.4,
+            amount: 85.19,
             isPercentage: false
           }, {
             type: "Wire Fee",
-            amount: 25.00
+            amount: 30.00
           }, {
             type: "FIRA Fee",
-            amount: 15.00
+            amount: 5.00
           }],
           totalOnTransaction: 1275.00,
           effectiveCost: 2.85
