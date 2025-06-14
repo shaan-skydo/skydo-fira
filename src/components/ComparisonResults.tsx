@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -205,10 +206,10 @@ export const ComparisonResults = ({
                               }).format(editAmount[0])}
                             </span>
                           </div>
-                          <Slider value={editAmount} onValueChange={setEditAmount} max={1000000} min={500} step={500} className="w-full" />
+                          <Slider value={editAmount} onValueChange={setEditAmount} max={300000} min={500} step={500} className="w-full" />
                           <div className="flex justify-between text-xs text-slate-500">
                             <span>$500</span>
-                            <span>$1M</span>
+                            <span>$300K</span>
                           </div>
                         </div>
                         <div className="text-center">
