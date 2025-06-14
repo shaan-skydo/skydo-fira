@@ -71,7 +71,7 @@ const Index = () => {
   };
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Skydo Logo - Left aligned */}
+        {/* Header with logos */}
         <motion.div initial={{
         opacity: 0,
         y: -20
@@ -80,10 +80,16 @@ const Index = () => {
         y: 0
       }} transition={{
         duration: 0.5
-      }} className="flex justify-start top-6 z-10 mb-8">
+      }} className="flex justify-between items-center top-6 z-10 mb-8">
+          {/* Skydo Logo - Left aligned */}
           <button onClick={handleLogoClick} className="hover:opacity-80 transition-opacity duration-200">
             <img src="/lovable-uploads/8a593f9d-5b27-4492-ab02-1b13c5699292.png" alt="Skydo Logo" className="h-9 w-auto" />
           </button>
+          
+          {/* FIRA-DOC Logo - Right aligned */}
+          <div className="flex items-center">
+            <img src="/lovable-uploads/e2d88870-6d2d-4748-b8da-b4fcf2402f3b.png" alt="FIRA-DOC Logo" className="h-9 w-auto" />
+          </div>
         </motion.div>
 
         <motion.div initial={{
