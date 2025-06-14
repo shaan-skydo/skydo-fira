@@ -1,7 +1,8 @@
+
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, TrendingDown, DollarSign } from "lucide-react";
+import { ArrowLeft, TrendingDown } from "lucide-react";
 
 interface ComparisonResultsProps {
   data: {
@@ -127,7 +128,11 @@ export const ComparisonResults = ({
           <Card className="h-full shadow-lg border-green-200 bg-gradient-to-br from-white to-green-50">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-green-700 text-center flex items-center justify-center space-x-2">
-                <DollarSign className="w-6 h-6" />
+                <img 
+                  src="/lovable-uploads/e114eb01-a598-4afe-a954-12034557a0ea.png" 
+                  alt="Skydo Logo" 
+                  className="w-6 h-6"
+                />
                 <span>Skydo</span>
               </CardTitle>
             </CardHeader>
