@@ -6,6 +6,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
+
 interface ComparisonResultsProps {
   data: {
     currentProvider: {
@@ -38,6 +39,7 @@ interface ComparisonResultsProps {
   };
   onBackToHome: () => void;
 }
+
 export const ComparisonResults = ({
   data,
   onBackToHome
@@ -75,6 +77,16 @@ export const ComparisonResults = ({
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);
+  };
+  const formatUSD = (amount: number) => {
+    // Convert INR to USD using approximate rate (1 USD = 83 INR)
+    const usdAmount = amount / 83;
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(usdAmount);
   };
   const formatPercentage = (value: number) => {
     return `${value}%`;
@@ -148,7 +160,7 @@ export const ComparisonResults = ({
                 <span className="text-slate-600">Foreign Currency Amount</span>
                 <div className="flex items-center space-x-2">
                   <span className="font-semibold text-slate-800">
-                    {formatCurrency(updatedData.currentProvider.paymentAmount)}
+                    {formatUSD(updatedData.currentProvider.paymentAmount)}
                   </span>
                   <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                     <DialogTrigger asChild>
@@ -232,7 +244,7 @@ export const ComparisonResults = ({
               <div className="flex justify-between items-center py-2 border-b border-green-100">
                 <span className="text-slate-600">Foreign Currency Amount</span>
                 <span className="font-semibold text-green-700">
-                  {formatCurrency(updatedData.skydo.paymentAmount)}
+                  {formatUSD(updatedData.skydo.paymentAmount)}
                 </span>
               </div>
 
