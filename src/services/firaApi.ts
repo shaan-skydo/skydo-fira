@@ -30,23 +30,29 @@ export const uploadAndProcessFira = async (
   paymentMethod: string,
   importerId?: number
 ): Promise<FiraProcessingResult> => {
-  console.log('Starting API call to:', 'https://d81f-106-51-85-199.ngrok-free.app/api/v1/fira/upload');
+  // Build URL with query parameters
+  const baseUrl = 'https://d81f-106-51-85-199.ngrok-free.app/api/v1/fira/upload';
+  const params = new URLSearchParams();
+  params.append('paymentMethod', paymentMethod);
+  
+  if (importerId) {
+    params.append('importerId', importerId.toString());
+  }
+  
+  const urlWithParams = `${baseUrl}?${params.toString()}`;
+  
+  console.log('Starting API call to:', urlWithParams);
   console.log('File:', file.name, 'Size:', file.size, 'Type:', file.type);
   console.log('Payment Method:', paymentMethod);
   console.log('Importer ID:', importerId);
 
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('paymentMethod', paymentMethod);
-  
-  if (importerId) {
-    formData.append('importerId', importerId.toString());
-  }
 
-  console.log('FormData prepared, making fetch request...');
+  console.log('FormData prepared (file only), making fetch request...');
 
   try {
-    const response = await fetch('https://d81f-106-51-85-199.ngrok-free.app/api/v1/fira/upload', {
+    const response = await fetch(urlWithParams, {
       method: 'POST',
       headers: {
         'ngrok-skip-browser-warning': 'true'
