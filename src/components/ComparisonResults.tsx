@@ -140,7 +140,7 @@ export const ComparisonResults = ({
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-green-700 text-center flex items-center justify-center space-x-2">
                 <img 
-                  src="/lovable-uploads/1f37d39c-1900-400a-84cc-fbbc822ff48f.png" 
+                  src="/lovable-uploads/07586f70-3dc6-4a36-9683-1478e37a92d3.png" 
                   alt="Skydo Logo" 
                   className="w-6 h-6"
                 />
