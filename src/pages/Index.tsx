@@ -103,7 +103,7 @@ const Index = () => {
             <AnimatedHeaderText />
             {" "}Document
           </h1>
-          <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">Upload your FIRA file to instantly compare your current provider's exchange rate against the live market rate offered by Skydo.</p>
+          <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">Upload your FIRA document to instantly compare your provider's exchange rate against the live market rate offered by Skydo.</p>
         </motion.div>
 
         {!analysisData && !isAnalyzing && <FileUpload onFileUpload={handleFileUpload} />}
