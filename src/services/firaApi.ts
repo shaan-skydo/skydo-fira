@@ -39,8 +39,11 @@ export const uploadAndProcessFira = async (
   }
 
   try {
-    const response = await fetch('/api/v1/fira/upload', {
+    const response = await fetch('https://d81f-106-51-85-199.ngrok-free.app/api/v1/fira/upload', {
       method: 'POST',
+      headers: {
+        'ngrok-skip-browser-warning': 'true'
+      },
       body: formData,
     });
 
